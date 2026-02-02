@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Expense Tracker</title>
+    <link rel="stylesheet" href="task.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Daily Expense Tracker</h1>
+
+    <!-- Expense Input Section -->
+    <div class="form">
+        <input type="text" id="expenseName" placeholder="Expense Name or Description">
+        <input type="number" id="expenseAmount" placeholder="Amount (₹)" min="1">
+
+        <select id="expenseCategory">
+            <option value="">Choose Category</option>
+            <option>Food</option>
+            <option>Travel</option>
+            <option>Shopping</option>
+            <option>Bills</option>
+        </select>
+
+        <button onclick="addExpense()">➕ Add Expense</button>
+    </div>
+
+    <!-- Expense List -->
+    <h2>Recorded Expenses</h2>
+    <ul id="expenseList"></ul>
+
+    <!-- Total -->
+    <h2>Total Spending: ₹ <span id="total">0</span></h2>
+
+</div>
+
+<script>
+    let totalExpense = 0;
+
+    function addExpense() {
+        const name = document.getElementById("expenseName").value;
+        const amount = document.getElementById("expenseAmount").value;
+        const category = document.getElementById("expenseCategory").value;
+
+        if (name === "" || amount === "" || category === "") {
+            alert("Please fill all fields");
+            return;
+        }
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <span>${name} - ${category} : ₹${amount}</span>
+            <button class="delete-btn" onclick="deleteExpense(this, ${amount})">X</button>
+        `;
+
+        document.getElementById("expenseList").appendChild(li);
+
+        totalExpense += parseFloat(amount);
+        updateTotal();
+
+        document.getElementById("expenseName").value = "";
+        document.getElementById("expenseAmount").value = "";
+        document.getElementById("expenseCategory").value = "";
+    }
+
+    function deleteExpense(button, amount) {
+        button.parentElement.remove();
+        totalExpense -= parseFloat(amount);
+        updateTotal();
+    }
+
+    function updateTotal() {
+        document.getElementById("total").innerText = totalExpense.toFixed(2);
+    }
+</script>
+
+</body>
+</html>
